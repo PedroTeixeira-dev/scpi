@@ -4,12 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Controle de pendencias</title>
-  <link href='/style.css' rel='stylesheet'>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <link href='style.css' rel='stylesheet'>
 </head>
 <body>
   <header class="background">
     <div class="container header">
-      <span class="logo"></span>
+      <img src="chave-simples.svg" alt="icone de chave inglesa">
       <h1>Sistema de Controle de Pendências industriais</h1>
       <nav>
         <ul>
@@ -24,7 +27,8 @@
     </div>
 
   </header>
-  <section class="container">
+<!-- 
+  <section class="container glass-container">
     <main class="s1main">
       <h2>Dashboard das pendencias</h2>
       <ul>
@@ -43,22 +47,24 @@
       </ul>
     </main>
   </section>
-  <section class="container">
+ -->
+
+  <section class="container glass-container">
     <main class="s2main">
-      <form action="submit" method="post">
+      <div class="form">
         <h3>Nova pendencia</h3>
         <div class="todosinputs">
           <div class="item">
             <label for="autor">Autor</label>
-            <input type="text" name="autor" id="autor">
+            <input type="text" name="autor" id="newAutor">
           </div>
           <div class="item">
             <label for="titulo">Titulo</label>
-            <input type="text" name="titulo" id="titulo">
+            <input type="text" name="titulo" id="newTitulo">
           </div>
           <div class="item">
             <label for="equipamento">Equipamento</label>
-            <select name="equipamento" id="equipamento">
+            <select name="equipamento" id="newEquipamento">
               <option value="1">equipamento 1</option>
               <option value="2">equipamento 2</option>
               <option value="3">equipamento 3</option>
@@ -66,15 +72,32 @@
           </div>
           <div class="item">
             <label for="descricao">Descrição</label>
-            <textarea name="descricao" id="descricao" cols=30 rows="1"></textarea>
+            <textarea name="descricao" id="newDescricao" cols=30 rows="1"></textarea>
           </div>
-          <button type="submit">Salvar</button>
+          <button onclick="newItem()">Adicionar</button>
         </div>
         
-      </form>
+      </div>
     </main>
   </section>
+  <section class="container glass-container">
+    <main class="s3main">
+      <table id="myTable">
+        <tr>
+            <th>Autor</th>
+            <th>Titulo</th>
+            <th>Equipamento</th>
+            <th>Descricao</th>
+            <th><img src="https://cdn-icons-png.flaticon.com/512/126/126468.png" width="15px" height="15px"></th>
+        </tr>
+    </table>
+    </main>
+</section>
 
-  <script type="text/javascript" src="/main.js"></script>
+<!-- 
+<footer class="background"></footer>
+-->
+
+  <script type="text/javascript" src="main.js"></script>
 </body>
 </html>

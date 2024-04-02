@@ -2,18 +2,25 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    font-family: "Roboto", sans-serif;
 
     li {
         margin-right: 16px;
         list-style: none;
 
-        a{
+        a {
             text-decoration: none;
-            color: #fff;
+            color: #000;
             font-size: 16px;
             font-weight: 600;
         }
     }
+}
+
+body {
+    background-image: url(gears-1236578_1280.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .container {
@@ -33,12 +40,12 @@
     align-items: center;
     padding: 10px 20px;
     background-color: #48e239;
+    margin-bottom: 24px;
     
 
-    span {
+    img {
         width: 20px;
         height: 20px;
-        background-color: #fff;
     }
 
     ul {
@@ -54,8 +61,9 @@
     text-align: center;
     margin: 24px auto;
     border: 2px solid #48e239;
-    border-radius: 10px;
     padding: 16px;
+    background-color: #fff;
+    border-radius: 8px;
 
     ul {
         margin-top: 16px;
@@ -72,7 +80,11 @@
 }
 
 .s2main {
-    form {
+
+    padding: 16px;
+
+
+    .form {
         h3 {
             text-align: center;
             margin-bottom: 16px;
@@ -103,4 +115,55 @@
         text-align: center;
     }
     }
+}
+
+.s3main {
+
+    margin-top: 40px;
+
+    #myTable {
+        width: 100%;
+        margin: 0 auto;
+
+        tr {
+            text-align: center;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            margin-bottom: 16px;
+
+            th {
+                width: 96px;
+            }
+        }
+
+        td {
+            max-width: 100%;
+            width: 96px;
+            word-wrap: break-word;
+            margin-bottom: 8px;
+        }
+    }
+
+    .close {
+        color: red;
+        cursor: pointer;
+    }
+}
+
+.glass-container {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
+    margin-bottom: 24px;
+  }
+
+footer {
+    height: 80px;
+    margin-bottom: 0px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
 }
