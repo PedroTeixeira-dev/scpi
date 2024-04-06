@@ -17,10 +17,26 @@ class Pendencia {
       const inputEquipamento = document.getElementById("newEquipamento").value;
       const inputDescricao = document.getElementById("newDescricao").value;
       const inputStatus = document.getElementById("newStatus").value;
-      
-      const novaPendencia = new Pendencia(inputAutor, inputTitulo, inputEquipamento, inputDescricao, inputStatus);
 
-    insertList(novaPendencia);
+      const existePendencia = pendencias.some(pendencia => pendencia.titulo === inputTitulo);
+      if (existePendencia) {
+          alert("Já existe uma pendência com esse título, favor escolher outro");
+      } 
+      else if (inputTitulo.length == 0 || inputDescricao.length == 0 || inputAutor.length == 0) {
+        alert("Insira o título, descricão e autor"); 
+      }
+      
+      else {
+          const novaPendencia = new Pendencia(inputAutor, inputTitulo, inputEquipamento, inputDescricao, inputStatus);
+  
+          pendencias.push(novaPendencia);
+      
+          console.log(pendencias);
+      
+          insertList(novaPendencia);
+
+          atualizarDashboard()
+      }
   }
   
   const insertList = (novaPendencia) => {
@@ -45,12 +61,18 @@ class Pendencia {
       editStatus(row);
     };
     editCell.appendChild(editButton);
-  
+    
+
+    document.getElementById("newAutor").value = "";
+    document.getElementById("newTitulo").value = "";
+    document.getElementById("newEquipamento").value = "";
+    document.getElementById("newDescricao").value = "";
     insertButton(row.insertCell(-1));
     removeElement()
   }
   
   const editStatus = (row) => {
+    const tituloDaAlteracao = row.cells[1].textContent; // Obtém o título da pendência
     const statusCell = row.cells[4]; // Índice da coluna de status (começando de 0)
     const status = statusCell.textContent;
     
@@ -58,13 +80,13 @@ class Pendencia {
     const selectStatus = document.createElement('select');
     const statusOptions = ['Em aberto', 'Em tratamento', 'Concluída'];
     statusOptions.forEach(option => {
-      const optionElement = document.createElement('option');
-      optionElement.value = option;
-      optionElement.textContent = option;
-      if (option === status) {
-        optionElement.selected = true;
-      }
-      selectStatus.appendChild(optionElement);
+        const optionElement = document.createElement('option');
+        optionElement.value = option;
+        optionElement.textContent = option;
+        if (option === status) {
+            optionElement.selected = true;
+        }
+        selectStatus.appendChild(optionElement);
     });
   
     // Substituir o conteúdo da célula pelo select
@@ -73,11 +95,23 @@ class Pendencia {
   
     // Adicionar evento para salvar o novo status ao selecionar uma opção
     selectStatus.addEventListener('change', () => {
-      statusCell.textContent = selectStatus.value;
+        const novoStatus = selectStatus.value;
+
+        for (let pendencia of pendencias) {
+            if (pendencia.titulo === tituloDaAlteracao) {
+                pendencia.status = novoStatus;
+                console.log(pendencia.status);
+                console.log(pendencias);
+                break;
+            }
+        }
+        statusCell.textContent = novoStatus
+        atualizarDashboard()
     });
-  }
+}
+
   
-  
+  // statusCell.textContent = novoStatus
   const insertButton = (parent) => {
     const span = document.createElement("span");
     const txt = document.createTextNode("\u00D7");
@@ -86,6 +120,16 @@ class Pendencia {
     parent.appendChild(span);
   }
 
+  const removePendenciaByTitulo = (titulo) => {
+    for (let i = 0; i < pendencias.length; i++) {
+        if (pendencias[i].titulo === titulo) {
+            pendencias.splice(i, 1); // Remove 1 elemento a partir do índice encontrado
+            break; // Encerra o loop após remover a pendência
+        }
+    }
+}
+
+
   const removeElement = () => {
     let close = document.getElementsByClassName("close");
     // var table = document.getElementById('myTable');
@@ -93,13 +137,37 @@ class Pendencia {
     for (i = 0; i < close.length; i++) {
       close[i].onclick = function () {
         let div = this.parentElement.parentElement;
-        const nomeItem = div.getElementsByTagName('td')[0].innerHTML
+        const nomeItem = div.getElementsByTagName('td')[1].innerHTML
+
+        removePendenciaByTitulo(nomeItem)
+      
         if (confirm("Você tem certeza?")) {
           div.remove()
           /*deleteItem(nomeItem)*/
           alert("Removido!")
         }
+        atualizarDashboard()
       }
     }
   }
+
+  // Função para atualizar os números de pendências e tipos no dashboard
+const atualizarDashboard = () => {
+  const contagemStatus = {
+      'Em aberto': 0,
+      'Em tratamento': 0,
+      'Concluída': 0
+  };
+
+  // Conta o número de pendências para cada tipo de status
+  pendencias.forEach(pendencia => {
+      contagemStatus[pendencia.status]++;
+  });
+
+  // Atualiza os contadores no HTML
+  document.getElementById('pendenciasAberto').textContent = contagemStatus['Em aberto'];
+  document.getElementById('pendenciasExecucao').textContent = contagemStatus['Em tratamento'];
+  document.getElementById('pendenciasConcluidas').textContent = contagemStatus['Concluída'];
+};
+
   
