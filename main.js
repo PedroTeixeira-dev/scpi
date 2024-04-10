@@ -1,4 +1,4 @@
-// criando a classe das pendeências.
+// criando a classe das pendeências. 
 
 class Pendencia {
     constructor(autor, titulo, equipamento, descricao, status = 'Em aberto') {
