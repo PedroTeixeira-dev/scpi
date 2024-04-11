@@ -69,6 +69,21 @@ const deleteItem = (item) => {
     });
 }
 
+const updateStatus = (item, novoStatus) => {
+  let url = `http://127.0.0.1:5000/pendencia?nome=${item}&status=${novoStatus}`;
+  fetch(url, {
+    method: 'put'
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Status atualizado com sucesso:', data);
+    })
+    .catch((error) => {
+      console.error('Erro ao atualizar status:', error);
+    });
+};
+
+
 // criando a classe das pendeências. 
 
 class Pendencia {
@@ -198,6 +213,7 @@ class Pendencia {
         }
         statusCell.textContent = novoStatus
         atualizarDashboard()
+        updateStatus(tituloDaAlteracao, novoStatus)
     });
 }
 
