@@ -1,3 +1,74 @@
+  // criando o aray que irá armazenar as pendencias criadas.
+
+  let pendencias = []
+
+/*
+  --------------------------------------------------------------------------------------
+  Função para obter a lista existente do servidor via requisição GET
+  --------------------------------------------------------------------------------------
+*/
+const getList = async () => {
+  let url = 'http://127.0.0.1:5000/pendencias';
+  fetch(url, {
+    method: 'get',
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      data.pendencias.forEach(item => insertList(item))
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
+/*
+  --------------------------------------------------------------------------------------
+  Chamada da função para carregamento inicial dos dados
+  --------------------------------------------------------------------------------------
+*/
+getList()
+
+/*
+  --------------------------------------------------------------------------------------
+  Função para colocar um item na lista do servidor via requisição POST
+  --------------------------------------------------------------------------------------
+*/
+const postItem = async (inputAutor, inputTitulo, inputEquipamento, inputDescricao, inputStatus) => {
+  const formData = new FormData();
+  formData.append('autor', inputAutor);
+  formData.append('titulo', inputTitulo);
+  formData.append('equipamento', inputEquipamento);
+  formData.append('descricao', inputDescricao);
+  formData.append('status', inputStatus)
+
+  let url = 'http://127.0.0.1:5000/pendencia';
+  fetch(url, {
+    method: 'post',
+    body: formData
+  })
+    .then((response) => response.json())
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
+/*
+  --------------------------------------------------------------------------------------
+  Função para deletar um item da lista do servidor via requisição DELETE
+  --------------------------------------------------------------------------------------
+*/
+const deleteItem = (item) => {
+  console.log(item)
+  let url = 'http://127.0.0.1:5000/pendencia?nome=' + item;
+  fetch(url, {
+    method: 'delete'
+  })
+    .then((response) => response.json())
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
 // criando a classe das pendeências. 
 
 class Pendencia {
@@ -10,9 +81,7 @@ class Pendencia {
     }
   }
 
-  // criando o aray que irá armazenar as pendencias criadas.
 
-  let pendencias = []
   
   // função responsável pela criacao de um novo item (pendencia).
 
@@ -35,14 +104,10 @@ class Pendencia {
       }
       
       else {
-          const novaPendencia = new Pendencia(inputAutor, inputTitulo, inputEquipamento, inputDescricao, inputStatus);
-  
-          pendencias.push(novaPendencia);
-      
-          console.log(pendencias);
-      
-          insertList(novaPendencia);
+          postItem(inputAutor, inputTitulo, inputEquipamento, inputDescricao, inputStatus)
 
+          const novaPendencia = new Pendencia(inputAutor, inputTitulo, inputEquipamento, inputDescricao, inputStatus);
+          insertList(novaPendencia);
           atualizarDashboard()
       }
   }
@@ -50,20 +115,30 @@ class Pendencia {
   // funcão que inseri os dados da pendencia na tabela.
 
   const insertList = (novaPendencia) => {
+
+    console.log(novaPendencia)
+    
+    pendencias.push(novaPendencia)
+
     const table = document.getElementById('myTable');
     const row = table.insertRow();
   
-    for (let key in novaPendencia) {
-      if (key !== 'status') {
-        const cell = row.insertCell();
-        cell.textContent = novaPendencia[key];
-      } else {
-        const cell = row.insertCell();
-        cell.textContent = novaPendencia[key];
-        cell.setAttribute('contenteditable', 'false'); // Impede edição direta na tabela.
-      }
-    }
-  
+    const cellAutor = row.insertCell();
+    cellAutor.textContent = novaPendencia.autor;
+
+    const cellTitulo = row.insertCell()
+    cellTitulo.textContent = novaPendencia.titulo 
+
+    const cellEquipamento = row.insertCell()
+    cellEquipamento.textContent = novaPendencia.equipamento
+
+    const cellDescricao = row.insertCell()
+    cellDescricao.textContent = novaPendencia.descricao
+      
+    cellStatus = row.insertCell();
+    cellStatus.textContent = novaPendencia.status;
+    cellStatus.setAttribute('contenteditable', 'false'); // Impede edição direta na tabela.
+    
     const editCell = row.insertCell();
     const editButton = document.createElement('button');
     editButton.textContent = 'Editar';
@@ -81,6 +156,7 @@ class Pendencia {
 
     insertButton(row.insertCell(-1));
     removeElement()
+    atualizarDashboard()
   }
   
   // função para fazer a edicão do status da pendência.
@@ -158,6 +234,7 @@ class Pendencia {
       
         if (confirm("Você tem certeza?")) {
           div.remove()
+          deleteItem(nomeItem)
           alert("Removido!")
         }
         atualizarDashboard()
